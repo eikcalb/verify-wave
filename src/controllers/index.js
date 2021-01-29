@@ -91,7 +91,7 @@ async function validator(req, res) {
 }
 
 function syntaxErrorHandler(err, req, res, next) {
-    if (err && err instanceof SyntaxError && err.type === 'entity.parse.failed') {
+    if (err && err instanceof SyntaxError && err.type === 'entity.parse.failed' && req.method === 'POST') {
         return res.status(err.status || 400).json(generateResponse(null, false, 'Invalid JSON payload passed.'))
     }
 
