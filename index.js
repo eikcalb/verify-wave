@@ -16,6 +16,6 @@ app.use(controllers.syntaxErrorHandler)
 app.get('/', controllers.root)
 app.post('/validate-rule', controllers.validator)
 
-app.listen(process.env.SERVER_PORT, () => {
+app.listen(process.env.PORT || process.env.SERVER_PORT, () => {
     console.log(`Server created and listening on: ${process.env.SERVER_PORT}`)
 })
