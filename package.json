@@ -1,0 +1,30 @@
+{
+    "dependencies": {
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "morgan": "^1.10.0"
+    },
+    "name": "verify",
+    "version": "1.0.0",
+    "main": "index.js",
+    "devDependencies": {},
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node ."
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/eikcalb/verify-wave.git"
+    },
+    "keywords": [
+        "data",
+        "validation"
+    ],
+    "author": "eikcalb <agwaisraelonome@gmail.com>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/eikcalb/verify-wave/issues"
+    },
+    "homepage": "https://github.com/eikcalb/verify-wave#readme",
+    "description": "verify is a data validation tool which exposes an endpoint that receives and validates data"
+}
