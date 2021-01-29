@@ -10,6 +10,9 @@ app.use(logger)
 // Routes go here
 const controllers = require('./src/controllers')
 
+// Middleware to catch invalid JSON
+app.use(controllers.syntaxErrorHandler)
+
 app.get('/', controllers.root)
 app.post('/validate-rule', controllers.root)
 

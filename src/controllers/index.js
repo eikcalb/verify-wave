@@ -44,13 +44,26 @@ function root(req, res) {
  */
 async function validator(req, res) {
     try {
-
+        const { rule, data } = req.body
+        if (!rule) {
+            throw new Error('rule is required.')
+        } else if (!data) {
+            throw new Error('data is required.')
+        } else if (typeof rule !== 'object') {
+            throw new Error('rule should be an object.')
+        } else if (!['object', 'string'].includes(typeof data)) {
+            // This checks if the data field is not object, array or string
+            throw new Error('data should be an array, object or string.')
+        }
     } catch (e) {
-        res.status(e.status || 400).send(generateResponse({
-
-        }, false, e.message))
+        res.status(e.status || 400).send(generateResponse(null, false, e.message))
     }
 }
 
+async function syntaxErrorHandler(err, req, res, next) {
+    if (err && typeof err === SyntaxError) {
+        res.status(err.status || 400).send(generateResponse(null, false, 'Invalid JSON payload passed.'))
+    }
+}
 
-module.exports = { root }
+module.exports = { root, syntaxErrorHandler }
