@@ -1,4 +1,4 @@
-const { validate } = require('../validate')
+const { validate, getProperty } = require('../validate')
 
 /**
  * Helper method to generate a properly formatted response
@@ -55,15 +55,47 @@ async function validator(req, res) {
             // This checks if the data field is not object, array or string
             throw new Error('data should be an array, object or string.')
         }
+
+        let { field, condition, condition_value } = rule
+        let field_value = getProperty(field, data)
+
+        const success = validate(field_value, condition, condition_value)
+
+        if (success) {
+            res.send(generateResponse({
+                validation: {
+                    error: false,
+                    field,
+                    field_value,
+                    condition,
+                    condition_value
+                }
+            }, true, `field ${field} successfully validated.`))
+        } else {
+            return await Promise.reject({
+                data: {
+                    validation: {
+                        error: false,
+                        field,
+                        field_value,
+                        condition,
+                        condition_value
+                    }
+                },
+                message: `field ${field} failed validation.`
+            })
+        }
     } catch (e) {
-        res.status(e.status || 400).send(generateResponse(null, false, e.message))
+        res.status(e.status || 400).json(generateResponse(e.data || null, false, e.message))
     }
 }
 
-async function syntaxErrorHandler(err, req, res, next) {
-    if (err && typeof err === SyntaxError) {
-        res.status(err.status || 400).send(generateResponse(null, false, 'Invalid JSON payload passed.'))
+function syntaxErrorHandler(err, req, res, next) {
+    if (err && err instanceof SyntaxError && err.type === 'entity.parse.failed') {
+        return res.status(err.status || 400).json(generateResponse(null, false, 'Invalid JSON payload passed.'))
     }
+
+    next()
 }
 
-module.exports = { root, syntaxErrorHandler }
+module.exports = { root, validator, syntaxErrorHandler }

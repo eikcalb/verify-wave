@@ -3,10 +3,10 @@ function validate(field, operator, query) {
     let response = false
     switch (operator) {
         case 'eq':
-            response = field == query
+            response = field === query
             break
         case 'neq':
-            response = field != query
+            response = field !== query
             break
         case 'gt':
             response = field > query
@@ -18,7 +18,7 @@ function validate(field, operator, query) {
             response = `${field}`.includes(query)
             break
         default:
-            throw new Error('Condition operator not supported')
+            throw new Error('condition operator not supported.')
     }
 
     return response
@@ -35,7 +35,7 @@ function getProperty(property, reference) {
     if (typeof property === 'string') {
         let path = property.split('.')
         if (path.length > 3) {
-            throw new Error('Field nesting should not be more than 2 levels.')
+            throw new Error('field nesting should not be more than 2 levels.')
         }
         // Use reduce to go through the object properties.
         // An alternative solution would be too use a for loop
@@ -44,11 +44,11 @@ function getProperty(property, reference) {
                 let reference = root[current]
                 return reference
             } else {
-                throw new Error(`${property} is required.`)
+                throw new Error(`field ${property} is missing from data.`)
             }
         }, reference)
     } else {
-        throw new Error('Invalid property key specified.')
+        throw new Error('invalid property key specified.')
     }
 }
 
